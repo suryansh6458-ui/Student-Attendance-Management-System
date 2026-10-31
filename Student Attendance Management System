@@ -1,0 +1,137 @@
+students = []
+
+print("=" * 45)
+print("     STUDENT ATTENDANCE MANAGEMENT")
+print("=" * 45)
+
+while True:
+    print("\n1. Add Student")
+    print("2. Mark Attendance")
+    print("3. View Attendance Report")
+    print("4. Search Student")
+    print("5. View Attendance Percentage")
+    print("6. Exit")
+
+    choice = input("\nEnter your choice: ")
+
+    if choice == "1":
+        roll_no = input("Enter roll number: ")
+        name = input("Enter student name: ").strip()
+
+        found = False
+
+        for student in students:
+            if student[0] == roll_no:
+                found = True
+
+        if found:
+            print("Roll number already exists.")
+
+        elif name == "":
+            print("Name cannot be empty.")
+
+        else:
+            # Record: Roll No, Name, Attendance List
+            students.append([roll_no, name, []])
+            print("Student added successfully!")
+
+    elif choice == "2":
+        if len(students) == 0:
+            print("No students registered.")
+
+        else:
+            print("\nSTUDENT LIST")
+
+            for student in students:
+                print(student[0], "-", student[1])
+
+            roll_no = input("\nEnter roll number: ")
+            found = False
+
+            for student in students:
+                if student[0] == roll_no:
+                    found = True
+
+                    status = input(
+                        "Enter attendance (P for Present, A for Absent): "
+                    ).upper()
+
+                    if status == "P" or status == "A":
+                        student[2].append(status)
+                        print("Attendance marked successfully!")
+
+                    else:
+                        print("Invalid attendance status.")
+
+            if found == False:
+                print("Student not found.")
+
+    elif choice == "3":
+        if len(students) == 0:
+            print("No attendance records available.")
+
+        else:
+            print("\nATTENDANCE REPORT")
+            print("-" * 60)
+            print(f"{'Roll No':<12}{'Name':<25}{'Present':<10}{'Absent':<10}")
+            print("-" * 60)
+
+            for student in students:
+                present = student[2].count("P")
+                absent = student[2].count("A")
+
+                print(f"{student[0]:<12}{student[1]:<25}"
+                      f"{present:<10}{absent:<10}")
+
+    elif choice == "4":
+        search_name = input(
+            "Enter student name or keyword: "
+        ).strip().lower()
+
+        found = False
+
+        for student in students:
+            if search_name in student[1].lower():
+                print("\nStudent Found")
+                print("Roll Number:", student[0])
+                print("Name:", student[1])
+                print("Total Classes:", len(student[2]))
+
+                found = True
+
+        if found == False:
+            print("No matching student found.")
+
+    elif choice == "5":
+        if len(students) == 0:
+            print("No students registered.")
+
+        else:
+            print("\nATTENDANCE PERCENTAGE")
+            print("-" * 45)
+
+            for student in students:
+                total_classes = len(student[2])
+                present = student[2].count("P")
+
+                if total_classes > 0:
+                    percentage = (present / total_classes) * 100
+                else:
+                    percentage = 0
+
+                print("Name:", student[1])
+                print("Attendance:", f"{percentage:.2f}%")
+
+                if percentage < 75:
+                    print("Status: Below 75% attendance")
+                else:
+                    print("Status: Attendance requirement met")
+
+                print("-" * 30)
+
+    elif choice == "6":
+        print("Thank you for using the Attendance System!")
+        break
+
+    else:
+        print("Invalid choice. Please select 1 to 6.")
